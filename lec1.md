@@ -116,5 +116,94 @@ int main(){
 | J Type  | OPCODE ( 6 bits) | ADDR (16 bit address)   | ---->                     | ----->                    | 32 |
 
 * opcodes are the unique 6 bit values that tell what instruction type it is
+# R-Type
 * NOTE that while the instruction type makes sense, MIPS asm in text is different
 * Ex: add $t0, $t1, $t2 adds $t1+$t2 and stores it in $t0, not $t0 + $t1 = $t2
+* Also, there's two special things with R-type instructions
+1. SHAMT -> stands for shift ammount and is the amount bit shifted in shift instructions
+2. FUNC -> for whatever reason? probably space, all r-type instructions have OPCODE = 0b000000, and when using R-Type you specify what instruction in the funct spot
+
+
+
+| Number | Name   | Usage / Purpose |
+|--------|--------|----------------|
+| 0      | `$zero` | Constant 0 (read-only) |
+| 1      | `$at`   | Assembler temporary (used by pseudo-instructions) |
+| 2      | `$v0`   | Function return value / expression evaluation |
+| 3      | `$v1`   | Function return value / expression evaluation |
+| 4      | `$a0`   | Function argument 1 |
+| 5      | `$a1`   | Function argument 2 |
+| 6      | `$a2`   | Function argument 3 |
+| 7      | `$a3`   | Function argument 4 |
+| 8      | `$t0`   | Temporary register (caller-saved) |
+| 9      | `$t1`   | Temporary register (caller-saved) |
+| 10     | `$t2`   | Temporary register (caller-saved) |
+| 11     | `$t3`   | Temporary register (caller-saved) |
+| 12     | `$t4`   | Temporary register (caller-saved) |
+| 13     | `$t5`   | Temporary register (caller-saved) |
+| 14     | `$t6`   | Temporary register (caller-saved) |
+| 15     | `$t7`   | Temporary register (caller-saved) |
+| 16     | `$s0`   | Saved register (callee-saved) |
+| 17     | `$s1`   | Saved register (callee-saved) |
+| 18     | `$s2`   | Saved register (callee-saved) |
+| 19     | `$s3`   | Saved register (callee-saved) |
+| 20     | `$s4`   | Saved register (callee-saved) |
+| 21     | `$s5`   | Saved register (callee-saved) |
+| 22     | `$s6`   | Saved register (callee-saved) |
+| 23     | `$s7`   | Saved register (callee-saved) |
+| 24     | `$t8`   | Temporary register (caller-saved) |
+| 25     | `$t9`   | Temporary register (caller-saved) |
+| 26     | `$k0`   | Reserved for OS kernel |
+| 27     | `$k1`   | Reserved for OS kernel |
+| 28     | `$gp`   | Global pointer (points to global data segment) |
+| 29     | `$sp`   | Stack pointer |
+| 30     | `$fp` / `$s8` | Frame pointer / saved register 8 |
+| 31     | `$ra`   | Return address (used by `jal`) |
+
+# Serial Communication (RS-232 UART)
+* Very crusty old communcation standard
+* Two lines, data and signal
+* To show there's gonna be communication you do 1 to 0 to show valid data is coming
+## Transmission Standard
+* Generally serial has
+  * Start bit (0)
+    * It's actually held high until transmission starts (0)
+    * Then a MSB bit size of N
+    * Then an (optional) parity bit
+      * Even parity bit will be zero if the added up data = 0 
+      * Odd is the samething. They're sit to make the statement evaluate to be even or to be odd if you added the parity to the data and treated it as an unsigned int
+      * If there's an even number of bits, the even parity = 0 else 1
+      * If there's an odd number of bits, the odd parity = 0 else 1
+    * Stop bit, always 1 and just holds high 
+# Speed and Baudrate
+* Because it's asynchronus the sender and reciever have to decide on one speed to transmit at.
+* Baud = bits per second
+```
+              CLK FREQ
+BAUD RATE = --------------
+            16 * UBBR + 1
+```
+# I Type Instructon
+* Memory is cool. I Type allows us to access this.
+* There are shockingly data sizes that are larger than 8 bits (each address holds a bit)
+* Using I type we can load these into registers and then do computational stuff to them
+* Let's say we wanna do A = B + C
+```
+//let's say we have two 
+//register M0 and M1 (maybe an int)
+lw $t0, M[1]
+lw $t1, M[0]
+//load both
+add $t2, $t1, $t0
+```
+* Storing larger data types are really confusingly called "words"
+* Words in MIPS are 4 bytes (32 bits)
+* I type uses justttt twoooo registerrrss!! Plus an offset one
+## Immediate I type instructions
+* You can also use that offset immediate register to do some quick math
+* EX: let's say you wanna dd 5 to $t1
+```
+addi $t0, $t1, 5
+```
+* Adds $t1 + 5 and stores at $t0
+* Think I = I type
