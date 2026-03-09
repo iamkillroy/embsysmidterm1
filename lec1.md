@@ -207,3 +207,64 @@ addi $t0, $t1, 5
 ```
 * Adds $t1 + 5 and stores at $t0
 * Think I = I type
+# von Nuemann architecture
+* IR - instruction register
+* PC - program counter
+* PC is where we are in memory and what we're executing
+* IR is the value at the PC and the instruction
+# J Type Instructions
+* Controls program flows
+* Branch statements branch if a condition is true
+* Unconditional jump = go somewhere with no expectation of returning "j somewhere"
+# Memory Layout of C Program (Stack/Heap)
+* Three parts: 
+  * Static 
+    * Stores text/code
+    * Initialised data
+    * Uninitailised data
+  * Stack
+    * Stores function calls
+  * Heap
+    * Deep cross stack data
+```
+DATA STRUCTURE IN C
+
+------------------ high mem (0xFFFFFFF)
+    STACK
+    | grows down
+    ∨
+    
+    ^
+    |
+    HEAP (grows up)
+------------------
+UNINITIALIZED DATA
+------------------
+INITIALIZED DATA 
+-----------------
+TEXT/PROG DATA
+---------------- low mem (0x0000000)
+```
+## Text section
+* Text contains executable code
+* below the heap and stack to protect it
+* Also usually read only
+## Initialized data
+* Data initialized before, predefined.
+* CAN BE CHANGED
+* Contains global/static variables
+## Unitialized data
+* empty space for variables that get used later, when the value is not immediately known at runtime
+* also includes 0 initialized variables
+* STATIC VARIABLES ARE COOL AF AND THEY KEEP THEIR VALUE PERSISTENTLY
+## Heap
+* Used for DYNAMIC memory allocation
+* Grows from low to high
+* Used for dynamic stuff
+* Can be accessed in different frames
+## Stack
+* Function call stack that stores local variables
+* After exiting a frame, bye bye!!
+### Stack stuff in MIPS
+* TLDR there's just a SP that you can adjust to change where you're at. You need to adjust it manually and set the data but you don't need to erase it if not in use
+# Caller/Callee Jump MIPS Stuff Convention
