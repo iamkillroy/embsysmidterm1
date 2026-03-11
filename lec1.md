@@ -268,3 +268,58 @@ TEXT/PROG DATA
 ### Stack stuff in MIPS
 * TLDR there's just a SP that you can adjust to change where you're at. You need to adjust it manually and set the data but you don't need to erase it if not in use
 # Caller/Callee Jump MIPS Stuff Convention
+* When doing unconditional jumps there's two types of ways (convention) that MIPS saves the states of the registers before
+* Caller saves:
+    * $t0-$t9
+    * $a0-a3
+    * $v0-$v1
+    * $ra
+* Callee saves
+  * $s0-s7
+  * $gp
+  * $sp
+  * $fp
+*
+# I2C
+* More fancy serial protocol
+* Here's the basics
+  * SDA/SCL (Serial data line/ serial clock line)
+  * Every device has an ID
+  * Multi communication between multiple different devices on the line
+* Data Protocol
+  * 8 bit sequence of packet
+  * Start condition SDA goes from high to low while SCL is high
+  * Then 8 bit sequence with 7 bit address a66-a0
+  * Then a R/W (WRITE = 0 READ = 1)
+  * Send an ACK bit next
+  * If ACK 1 = no data recieved
+  * Else ACK = 0 recieved!
+  * 
+# Instruction Processing
+* THis is the low digital logic level of the von Neumann computer model
+* FETCH
+  * Get the current address based on the PC
+* DECODE
+  * Assigns the correct registers and input signals
+  * Control sets the correct signals on MUX, ALU, DATA, etc
+* EXECUTE
+  * Do the operation of the instruction
+  * Pulses signals on every part
+# Data Storage Technologies
+* Flip Flops (like D Flip Flops)
+  * Fast super fast
+  * Expensive very expensive
+* Static RAM
+  * Fast but not as fast
+  * Expensive but not as expensive 6 transistors per bit
+* Dynamic RAM
+  * Slow, destructive read
+  * Cheap!
+* Flash
+  * Very slow
+  * Very very cheap
+* Volatile Memory is when it loses its data
+* Non-volatile retains its power when its removed
+# Decoding Memory Adddress
+* Top X MSB are the row!!!
+* Last X LSB is the column!!!!!!!!!
